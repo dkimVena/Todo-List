@@ -14,6 +14,7 @@ class ItemList extends Component {
       return (
         <Item
           {...todo}
+          id={todo._id}
           key={todo._id}
           onToggle={onToggle}
           onRemove={onRemove}

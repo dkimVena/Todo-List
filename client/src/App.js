@@ -17,11 +17,13 @@ class App extends Component {
         colors: ['#343a40', '#f03e3e', '#12b886', '#228ae6']
       }
       this.handleCreate = this.handleCreate.bind(this);
+      this.handleToggle = this.handleToggle.bind(this);
+      this.handleRemove = this.handleRemove.bind(this);
     }
 
   async componentDidMount() {
-    const response = await fetch('/api/todos');
-    const todos   = await response.json();
+    const response = await axios.get('/api/todos');
+    const todos   = await response.data;
     this.setState({ todos : todos });
   }
 
@@ -43,7 +45,7 @@ class App extends Component {
 
       this.setState({
         todos: todos.concat({
-          id: todo._id,
+          _id: todo._id,
           content: todo.content,
           checked: todo.checked,
           color: todo.color
@@ -58,10 +60,10 @@ class App extends Component {
     }
   }
 
-  handleToggle = (id) => {
+  async handleToggle (id) {
     const {todos} = this.state;
 
-    const index = todos.findIndex(todo => todo.id === id);
+    const index = todos.findIndex(todo => todo._id === id);
     const selected = todos[index];
 
     const nextTodos = [...todos];
@@ -71,16 +73,22 @@ class App extends Component {
       checked: !selected.checked
     }
 
-    this.setState({
-      todos: nextTodos
-    });
+    const response = await axios.put('/api/todos', nextTodos[index]);
+    if(!response.error) {
+      this.setState({
+        todos: nextTodos
+      });
+    }
   }
 
-  handleRemove = (id) => {
+  async handleRemove (id) {
     const {todos} = this.state;
-    this.setState({
-      todos: todos.filter(todo => todo.id !== id)
-    });
+    const response = await axios.delete(`/api/todos/${id}`);
+    if(!response.error) {
+      this.setState({
+        todos: todos.filter(todo => todo._id !== id)
+      });
+    }
   }
 
   handleColor = (id) => {
