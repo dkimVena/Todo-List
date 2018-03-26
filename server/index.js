@@ -21,7 +21,7 @@ app.use(bodyParser.urlencoded({extended: false}));
 const router = express.Router();
 
 // Priority serve any static files.
-app.use(express.static(path.resolve(__dirname, '../client/build')));
+app.use(express.static(path.resolve(__dirname, '../../client/build')));
 
 app.use('/api', api);
 
