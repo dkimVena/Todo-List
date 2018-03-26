@@ -24,21 +24,6 @@ const router = express.Router();
 app.use(express.static(path.resolve(__dirname, '../client/build')));
 
 app.use('/api', api);
-// app.get('/api/todos', (req, res) => {
-//     const todos = [
-//         { id: 0, content: ' 리액트 소개1', checked: false, color: '#343a40'},
-//         { id: 1, content: ' 리액트 소개2', checked: true, color: '#343a40' },
-//         { id: 2, content: ' 리액트 소개3', checked: false, color: '#343a40' }
-//     ];
-//     res.set('Content-Type', 'application/json');
-//     res.send(todos);
-// });
-
-// // Answer API requests.
-// app.get('/api', function (req, res) {
-//     res.set('Content-Type', 'application/json');
-//     res.send('{"message":"Hello from the custom server!"}');
-// });
 
 // All remaining requests return the React app, so it can handle routing.
 app.get('*', function(request, response) {

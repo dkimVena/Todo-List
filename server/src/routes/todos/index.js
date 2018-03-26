@@ -12,4 +12,14 @@ router.get('/', controller.getTodos);
  */
 router.post('/', controller.postTodo);
 
+/**
+ * post todo
+ */
+router.put('/', controller.editTodo);
+
+/**
+ * post todo
+ */
+router.delete('/:id', controller.deleteTodo);
+
 module.exports = router;
