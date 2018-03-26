@@ -76,7 +76,7 @@ module.exports.deleteTodo = async (req, res) => {
       //         error: "PERMISSION FAILURE",
       //         code: 4
       //     });
-      // }
+      // } 
 
       // REMOVE THE MEMO
       Todo.remove({ _id: req.params.id }, err => {
