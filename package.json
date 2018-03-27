@@ -7,7 +7,7 @@
     "node": "8.6.0"
   },
   "scripts": {
-    "start": "node server",
+    "start": "cross-env NODE_ENV=production node ./server/build/index.js",
     "heroku-prebuild": "cd server/ && npm install && npm install --only=dev --no-shrinkwrap && npm run build",
     "heroku-postbuild": "cd client/ && npm install && npm install --only=dev --no-shrinkwrap && npm run build"
   },
@@ -21,5 +21,8 @@
     "heroku",
     "create-react-app",
     "react"
-  ]
+  ],
+  "dependencies": {
+    "cross-env": "^5.1.4"
+  }
 }

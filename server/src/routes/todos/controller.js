@@ -5,6 +5,7 @@ const Todo = require('../../db/models/todo');
 module.exports.getTodos = async (req, res) => {
     Todo
     .find()
+    .sort('checked')
     .exec((error, todos) => {
       if (error) {
         console.log(error);

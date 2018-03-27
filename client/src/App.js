@@ -66,11 +66,18 @@ class App extends Component {
     const index = todos.findIndex(todo => todo._id === id);
     const selected = todos[index];
 
-    const nextTodos = [...todos];
+    let nextTodos = [...todos];
 
     nextTodos[index] = {
       ...selected,
       checked: !selected.checked
+    }
+    if(!selected.checked) {
+      const tmpTodo = nextTodos.splice(index, 1);
+      nextTodos = nextTodos.concat(tmpTodo);
+    } else {
+      const tmpTodo = nextTodos.splice(index, 1);
+      nextTodos = tmpTodo.concat(nextTodos);
     }
 
     const response = await axios.put('/api/todos', nextTodos[index]);
