@@ -23,7 +23,7 @@ module.exports.postTodo = async (req, res) => {
   
     if (!content) {
       return res.status(400).json({
-        message: 'Error title and content are all required!'
+        message: 'Error content are all required!'
       });
     }
 
@@ -45,7 +45,9 @@ module.exports.editTodo = async (req, res) => {
   Todo.findOneAndUpdate({ _id: body._id },
     req.body, (err, todo) => {
       if (err) {
-        throw err;
+        return res.status(500).json({
+          message: 'Could not edit todo'
+        });
       }
       res.json(todo);
     });
@@ -57,8 +59,7 @@ module.exports.deleteTodo = async (req, res) => {
   // CHECK MEMO ID VALIDITY
   if(!mongoose.Types.ObjectId.isValid(req.params.id)) {
       return res.status(400).json({
-          error: "INVALID ID",
-          code: 1
+          message: "INVALID ID"
       });
   }
 
@@ -68,8 +69,7 @@ module.exports.deleteTodo = async (req, res) => {
 
       if(!todo) {
           return res.status(404).json({
-              error: "NO RESOURCE",
-              code: 3
+              message: "NO RESOURCE"
           });
       }
       // if(memo.writer != req.session.loginInfo.username) {
@@ -81,7 +81,11 @@ module.exports.deleteTodo = async (req, res) => {
 
       // REMOVE THE MEMO
       Todo.remove({ _id: req.params.id }, err => {
-          if(err) throw err;
+          if(err) {
+              return res.status(500).json({
+                  message: "Could not delete todo"
+              });
+          }
           res.json({ success: true });
       });
   });

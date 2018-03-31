@@ -2,14 +2,14 @@ const mongoose = require('mongoose');
 const Todo = require('../../db/models/todo');
 
 module.exports.getTodos = async (req, res) => {
-  Todo.find().exec((error, todos) => {
+  Todo.find().sort('checked').exec((error, todos) => {
     if (error) {
       console.log(error);
       return res.status(500).json({
         message: 'Could not retrieve todo list'
       });
     }
-    res.json(todos);
+    res.json(todos.data);
   });
 };
 

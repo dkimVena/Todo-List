@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
 import Template from './Component/Template';
 import Form from './Component/Form';
 import ItemList from './Component/ItemList';
@@ -22,9 +23,14 @@ class App extends Component {
     }
 
   async componentDidMount() {
-    const response = await axios.get('/api/todos');
-    const todos   = await response.data;
-    this.setState({ todos : todos });
+    try {
+      const response = await axios.get('/api/todos');
+      const todos   = await response.data;
+      this.setState({ todos : todos });
+    } catch(e) {
+      toast(e.response.data.message, {
+        type: toast.TYPE.ERROR });
+    }
   }
 
   handleChange = (e) => {
@@ -40,18 +46,23 @@ class App extends Component {
         content: input,
         color: selectedColor
       }
-      const response = await axios.post('/api/todos', formData);
-      const todo = await response.data;
-
-      this.setState({
-        todos: todos.concat({
-          _id: todo._id,
-          content: todo.content,
-          checked: todo.checked,
-          color: todo.color
-        }),
-        input: ''
-      });
+      try {
+        const response = await axios.post('/api/todos', formData);
+        const todo = await response.data;
+  
+        this.setState({
+          todos: todos.concat({
+            _id: todo._id,
+            content: todo.content,
+            checked: todo.checked,
+            color: todo.color
+          }),
+          input: ''
+        });
+      } catch(e) {
+        toast(e.response.data.message, {
+          type: toast.TYPE.ERROR });
+      }
   }
 
   handleKeyPress = (e) => {
@@ -80,21 +91,31 @@ class App extends Component {
       nextTodos = tmpTodo.concat(nextTodos);
     }
 
-    const response = await axios.put('/api/todos', nextTodos[index]);
-    if(!response.error) {
-      this.setState({
-        todos: nextTodos
-      });
+    try {
+      const response = await axios.put('/api/todos', nextTodos[index]);
+      if(!response.error) {
+        this.setState({
+          todos: nextTodos
+        });
+      }
+    } catch(e) {
+      toast(e.response.data.message, {
+        type: toast.TYPE.ERROR });
     }
   }
 
   async handleRemove (id) {
-    const {todos} = this.state;
-    const response = await axios.delete(`/api/todos/${id}`);
-    if(!response.error) {
-      this.setState({
-        todos: todos.filter(todo => todo._id !== id)
-      });
+    try {
+      const {todos} = this.state;
+      const response = await axios.delete(`/api/todos/${id}`);
+      if(!response.error) {
+        this.setState({
+          todos: todos.filter(todo => todo._id !== id)
+        });
+      }
+    } catch(e) {
+      toast(e.response.data.message, {
+        type: toast.TYPE.ERROR });
     }
   }
 
@@ -125,6 +146,7 @@ class App extends Component {
         }
         >
         <ItemList todos={todos} onToggle={handleToggle} onRemove={handleRemove}/>
+        <ToastContainer />
       </Template>
     );
   }
